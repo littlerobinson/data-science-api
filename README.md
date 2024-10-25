@@ -1,26 +1,37 @@
 # data-science-api
 
-Skeleton for API in data sciences, machine, learning...
+This API allows for various operations on datasets, primarily focusing on manipulating and analyzing Excel files. The goal is to provide a simple interface to interact with different datasets, enabling operations such as sampling, obtaining unique values, grouping, and extracting quantiles.
 
-## Project architecture
+## Installation
 
-```
-.
-├── app                  # "app" is a Python package
-│   ├── __init__.py      # this file makes "app" a "Python package"
-│   ├── main.py          # "main" module, e.g. import app.main
-│   ├── dependencies.py  # "dependencies" module, e.g. import app.dependencies
-│   └── routers          # "routers" is a "Python subpackage"
-│   │   ├── __init__.py  # makes "routers" a "Python subpackage"
-│   │   ├── items.py     # "items" submodule, e.g. import app.routers.items
-│   │   └── users.py     # "users" submodule, e.g. import app.routers.users
-│   └── internal         # "internal" is a "Python subpackage"
-│       ├── __init__.py  # makes "internal" a "Python subpackage"
-│       └── admin.py     # "admin" submodule, e.g. import app.internal.admin
-```
+1. Clone the repository:
 
-## Run project dev environment
+   ```bash
+   git clone <repository-url>
+   cd <directory-name>
+   ```
 
-```
-docker build -t dev-data-science-api -f Dockerfile.dev .
-```
+````
+
+2. Build the image
+   ```bash
+   docker build -t dev-data-science-api -f Dockerfile.dev .
+   ```
+3. Run the container
+   ```bash
+   chmod +x run.sh # needed the first time
+   ./run.sh
+   ```
+
+## API Routes
+
+You can read the API documentation on your `url/docs`.
+
+Example :
+
+http://127.0.0.1:4000/docs
+
+## Usage
+
+Once the application is running, you can send requests to the specified routes to perform various data operations.
+````
