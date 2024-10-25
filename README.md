@@ -11,8 +11,6 @@ This API allows for various operations on datasets, primarily focusing on manipu
    cd <directory-name>
    ```
 
-````
-
 2. Build the image
    ```bash
    docker build -t dev-data-science-api -f Dockerfile.dev .
@@ -34,4 +32,3 @@ http://127.0.0.1:4000/docs
 ## Usage
 
 Once the application is running, you can send requests to the specified routes to perform various data operations.
-````
