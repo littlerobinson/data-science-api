@@ -120,10 +120,7 @@ async def predict(input_data: DoctorCancellationData):
         ]
     """
     # Transform data
-    input_data = pd.DataFrame(
-        input_data,
-        index=[0],
-    )
+    df = pd.DataFrame(dict(input_data), index=[0])
 
     mlflow.set_tracking_uri("https://mlflow.luciole.dev/")
 
@@ -136,7 +133,7 @@ async def predict(input_data: DoctorCancellationData):
 
     # Load model as a PyFuncModel.
     loaded_model = mlflow.pyfunc.load_model(logged_model)
-    prediction = loaded_model.predict(input_data)
+    prediction = loaded_model.predict(df)
 
     # Format response
     response = {"prediction": prediction.tolist()[0]}
