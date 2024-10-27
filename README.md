@@ -42,3 +42,37 @@ http://127.0.0.1:4000/docs
 ## Usage
 
 Once the application is running, you can send requests to the specified routes to perform various data operations.
+
+You can use the Dockerfile.dev.
+
+Create a run.sh file :
+
+```
+docker run -it \
+-v "$(pwd):/code" \
+-e MLFLOW_TRACKING_URI="MLFLOW_TRACKING_URI" \
+-e AWS_ACCESS_KEY_ID="AWS_ACCESS_KEY_ID" \
+-e AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY" \
+-e AWS_ARTIFACT_S3_URI="AWS_ARTIFACT_S3_URI" \
+-p 4000:80 \
+dev-data-science-api
+```
+
+Input example for predict route :
+
+```
+{
+  "Gender": "M",
+  "Age": 14,
+  "Neighbourhood": "Quartier Saint-Germain-l'Auxerrois",
+  "Scholarship": 0,
+  "Hypertension": 0,
+  "Diabetes": 0,
+  "Alcoholism": 1,
+  "Handcap": 0,
+  "SMS_received": 1,
+  "diff_appointment_scheduled": 3,
+  "AppointmentDay_DayOfWeek": 1,
+  "AppointmentDay_Month": 12
+}
+```

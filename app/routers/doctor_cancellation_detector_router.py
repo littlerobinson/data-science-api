@@ -4,6 +4,9 @@ import app.handlers.doctor_cancellation_detector_handler as hah
 from app.models.doctor_cancellation_data_model import DoctorCancellationData
 from app.models.group_by_model import GroupBy
 
+import json
+
+
 router = APIRouter(
     prefix="/doctor-cancellation-detector",
     # tags=["doctor-cancellation-detector"],
@@ -112,4 +115,4 @@ async def quantile(column: str, percent: float = 0.1, top: bool = True):
 @router.post("/predict", tags=["machine-learning"])
 async def predict(data: DoctorCancellationData):
     response = await hah.predict(data)
-    return Response(response.to_json(orient="records"), media_type="application/json")
+    return Response(content=json.dumps(response), media_type="application/json")

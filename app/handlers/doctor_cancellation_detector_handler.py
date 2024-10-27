@@ -122,11 +122,25 @@ async def predict(input_data: DoctorCancellationData):
     # Transform data
     df = pd.DataFrame(dict(input_data), index=[0])
 
+    df["AppointmentDay_DayOfWeek"] = df["AppointmentDay_DayOfWeek"].astype("int32")
+    df["AppointmentDay_Month"] = df["AppointmentDay_Month"].astype("int32")
+    df["diff_appointment_scheduled"] = df["diff_appointment_scheduled"].astype("int32")
+    df["SMS_received"] = df["SMS_received"].astype("int32")
+    df["Handcap"] = df["Handcap"].astype("int32")
+    df["Alcoholism"] = df["Alcoholism"].astype("int32")
+    df["Diabetes"] = df["Diabetes"].astype("int32")
+    df["Hypertension"] = df["Hypertension"].astype("int32")
+    df["Scholarship"] = df["Scholarship"].astype("int32")
+    df["Age"] = df["Age"].astype("int32")
+
+    df["Neighbourhood"] = df["Neighbourhood"].astype(str)
+
+    print("dataframe ", df.dtypes)
+
     mlflow.set_tracking_uri("https://mlflow.luciole.dev/")
 
     # Log model from mlflow
-    # logged_model = "runs:/982ccdfb4bcd4825a9d6f57fcdb08441/doctor-cancellation-detector"
-    logged_model = "runs:/2fb5565013ef43f0bf6c1c332a2cc546/doctor-cancellation-detector"
+    logged_model = "runs:/45d563eb6c5543d5bc9c53daa96b7550/doctor-cancellation-detector"
 
     # If you want to load model persisted locally
     # loaded_model = joblib.load('doctor-cancellation-detector/model.joblib')
