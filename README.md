@@ -21,6 +21,16 @@ This API allows for various operations on datasets, primarily focusing on manipu
    ./run.sh
    ```
 
+### Push container to heroku
+
+```bash
+heroku container:login
+heroku create --region eu app_name
+heroku stack:set container -a  app_name
+heroku container:push web -a app_name
+heroku container:release web -a app_name
+```
+
 ## API Routes
 
 You can read the API documentation on your `url/docs`.

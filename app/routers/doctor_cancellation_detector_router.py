@@ -1,30 +1,30 @@
 from fastapi import APIRouter, Response, HTTPException
 
-import app.handlers.hr_attrition_handler as hah
+import app.handlers.doctor_cancellation_detector_handler as hah
 from app.models.group_by_model import GroupBy
 
 router = APIRouter(
-    prefix="/attritions",
-    tags=["attritions"],
-    responses={404: {"description": "Attrition not found"}},
+    prefix="/doctor-cancellation-detector",
+    # tags=["doctor-cancellation-detector"],
+    responses={404: {"description": "Not found"}},
 )
 
 
 @router.get("/")
 async def root():
     """
-    Root endpoint to check the status of the HR Attritions API.
+    Root endpoint to check the status of the doctor-cancellation-detector API.
 
     Returns:
         dict: A message indicating the API is working.
     """
-    return {"message": "Hello HR Attritions"}
+    return {"message": "Hello Doctor Cancellation Detector"}
 
 
-@router.get("/sample")
-async def preview(count: int = 10):
+@router.get("/sample", tags=["data"])
+async def sample(count: int = 10):
     """
-    Endpoint to get a sample of rows from the HR attritions data.
+    Endpoint to get a sample of rows from the Doctor Cancellation Detector data.
 
     Args:
         count (int, optional): The number of rows to sample. Defaults to 10.
@@ -32,14 +32,14 @@ async def preview(count: int = 10):
     Returns:
         Response: A JSON response containing the sampled rows.
     """
-    response = await hah.preview(count)
+    response = await hah.sample(count)
     return Response(response.to_json(orient="records"), media_type="application/json")
 
 
-@router.get("/unique-values")
+@router.get("/unique-values", tags=["data"])
 async def unique_values(column: str):
     """
-    Endpoint to get unique values from a specified column in the HR attritions data.
+    Endpoint to get unique values from a specified column in the Doctor Cancellation Detector data.
 
     Args:
         column (str): The name of the column to retrieve unique values from.
@@ -56,7 +56,7 @@ async def unique_values(column: str):
     return Response(response.to_json(orient="records"), media_type="application/json")
 
 
-@router.post("/groupby")
+@router.post("/groupby", tags=["data"])
 async def groupby(groupBy: GroupBy):
     """
     Endpoint to group data by a specified column and apply an aggregation method.
@@ -65,7 +65,7 @@ async def groupby(groupBy: GroupBy):
         groupBy (GroupBy): An instance of GroupBy containing the method *, column, and target_column.
 
     Returns:
-        Response: A JSON response containing the grouped and aggregated data.
+        Response: A JSON response containing the grouped and aggregated data.https://mlflow.luciole.dev/
 
 
     Available methods:
@@ -80,10 +80,10 @@ async def groupby(groupBy: GroupBy):
     return Response(response.to_json(orient="records"), media_type="application/json")
 
 
-@router.get("/quantile")
+@router.get("/quantile", tags=["data"])
 async def quantile(column: str, percent: float = 0.1, top: bool = True):
     """
-    Endpoint to get quantile values from a specified column in the HR attritions data.
+    Endpoint to get quantile values from a specified column in the Doctor Cancellation Detector data.
 
     Args:
         column (str): The name of the column to retrieve quantile values from.
@@ -105,4 +105,10 @@ async def quantile(column: str, percent: float = 0.1, top: bool = True):
             status_code=404,
             detail="On error occur, check percent value and data type of the column",
         )
+    return Response(response.to_json(orient="records"), media_type="application/json")
+
+
+@router.post("/predict", tags=["machine-learning"])
+async def predict(years_xp: int):
+    response = await hah.predict(years_xp)
     return Response(response.to_json(orient="records"), media_type="application/json")

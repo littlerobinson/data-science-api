@@ -1,4 +1,7 @@
+import mlflow
 from app.models.group_by_model import GroupBy
+import os
+
 
 import pandas as pd
 
@@ -13,7 +16,13 @@ async def sample(count: int):
     Returns:
         pd.DataFrame: A DataFrame containing the sampled rows.
     """
-    df = pd.read_excel("data/hr_attritions.xlsx")
+
+    # get the current working directory
+    current_working_directory = os.getcwd()
+
+    # print output to the console
+    print("current dir :", current_working_directory)
+    df = pd.read_csv("./app/data/rawdata.zip")
     sample = df.sample(count)
     return sample
 
@@ -28,7 +37,7 @@ async def unique_values(column: str):
     Returns:
         pd.Series: A Series containing the unique values from the specified column, or False if the column does not exist.
     """
-    df = pd.read_excel("data/hr_attritions.xlsx")
+    df = pd.read_csv("./app/data/rawdata.zip")
     # Check if column exist
     if column not in df:
         return False
@@ -46,7 +55,7 @@ async def groupby(groupBy: GroupBy):
     Returns:
         pd.DataFrame: A DataFrame containing the grouped and aggregated data.
     """
-    df = pd.read_excel("data/hr_attritions.xlsx")
+    df = pd.read_csv("./app/data/rawdata.zip")
 
     method = groupBy.method
     column = groupBy.column
@@ -82,7 +91,7 @@ async def quantile(column: str, percent: float = 0.1, top: bool = True):
     Returns:
         pd.Series: A Series containing the unique quantile values from the specified column, or False if the percent value is out of range.
     """
-    df = pd.read_excel("data/hr_attritions.xlsx")
+    df = pd.read_csv("./app/data/rawdata.zip")
 
     if percent > 0.99 or percent < 0.01:
         return False
@@ -93,3 +102,64 @@ async def quantile(column: str, percent: float = 0.1, top: bool = True):
             data_quantile = df[df[column] < df[column].quantile(percent)]
 
         return pd.Series(data_quantile[column].unique())
+
+
+async def predict(input_data):
+    """
+    Prediction.
+
+    Args:
+        [
+            {
+                Gender: string
+                Age: double
+                Neighbourhood: string
+                Scholarship: double
+                Hypertension: double
+                Diabetes: double
+                Alcoholism: double
+                Handcap: double
+                SMS_received: double
+                diff_appointment_scheduled: double
+                AppointmentDay_DayOfWeek: integer
+                AppointmentDay_Month: integer
+            }
+        ]
+    """
+    # Read data
+    input_data = pd.DataFrame(
+        [
+            {
+                "Gender": "F",
+                "Age": 45.0,
+                "Neighbourhood": "Quartier Saint-Germain-l'Auxerrois",
+                "Scholarship": 0.0,
+                "Hypertension": 0.0,
+                "Diabetes": 0.0,
+                "Alcoholism": 1.0,
+                "Handcap": 0.0,
+                "SMS_received": 1.0,
+                "diff_appointment_scheduled": 1.0,
+                "AppointmentDay_DayOfWeek": 1,
+                "AppointmentDay_Month": 12,
+            }
+        ],
+        index=[0],
+    )
+
+    mlflow.set_tracking_uri("https://mlflow.luciole.dev/")
+
+    # Log model from mlflow
+    # logged_model = "runs:/982ccdfb4bcd4825a9d6f57fcdb08441/doctor-cancellation-detector"
+    logged_model = "https://mlflow.luciole.dev/#/experiments/35/runs/2fb5565013ef43f0bf6c1c332a2cc546"
+
+    # If you want to load model persisted locally
+    # loaded_model = joblib.load('doctor-cancellation-detector/model.joblib')
+
+    # Load model as a PyFuncModel.
+    loaded_model = mlflow.pyfunc.load_model(logged_model)
+    prediction = loaded_model.predict(input_data)
+
+    # Format response
+    response = {"prediction": prediction.tolist()[0]}
+    return response

@@ -1,3 +1,10 @@
+################ Project stuff *************************
+
+*.sh
+!run.sh
+
+################ Python stuff *************************
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
