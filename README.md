@@ -51,9 +51,6 @@ Create a run.sh file :
 docker run -it \
 -v "$(pwd):/code" \
 -e MLFLOW_TRACKING_URI="MLFLOW_TRACKING_URI" \
--e AWS_ACCESS_KEY_ID="AWS_ACCESS_KEY_ID" \
--e AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY" \
--e AWS_ARTIFACT_S3_URI="AWS_ARTIFACT_S3_URI" \
 -p 4000:80 \
 dev-data-science-api
 ```

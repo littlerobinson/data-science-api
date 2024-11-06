@@ -137,6 +137,7 @@ async def predict(input_data: DoctorCancellationData):
 
     print("dataframe ", df.dtypes)
 
+    # @todo change with env var
     mlflow.set_tracking_uri("https://mlflow.luciole.dev/")
 
     # Log model from mlflow
